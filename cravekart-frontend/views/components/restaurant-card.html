@@ -1,0 +1,19 @@
+<article class="restaurant-card">
+  <a ng-href="#/restaurants/{{$ctrl.restaurant.id}}" class="restaurant-photo">
+    <img ck-img="{{$ctrl.restaurant.image}}" alt="{{$ctrl.restaurant.name}}">
+    <span class="offer-tag closed-tag" ng-if="!$ctrl.restaurant.isOpen">Closed now</span>
+    <span class="offer-tag" ng-if="$ctrl.restaurant.isOpen && $ctrl.restaurant.deliveryFee === 0">Free delivery</span>
+  </a>
+  <div class="restaurant-info">
+    <div class="restaurant-title">
+      <h3>{{$ctrl.restaurant.name}}</h3>
+      <span class="rating" ng-if="$ctrl.restaurant.rating"><i class="fa-solid fa-star"></i> {{$ctrl.restaurant.rating | number:1}}</span>
+    </div>
+    <p>{{$ctrl.restaurant.cuisineText || 'Multi-cuisine'}}</p>
+    <div class="restaurant-meta">
+      <span><i class="fa-regular fa-clock"></i> {{$ctrl.restaurant.eta}} min</span>
+      <span ng-if="$ctrl.restaurant.area"><i class="fa-solid fa-location-dot"></i> {{$ctrl.restaurant.area}}</span>
+      <span><i class="fa-solid fa-motorcycle"></i> ₹{{$ctrl.restaurant.deliveryFee | inr}}</span>
+    </div>
+  </div>
+</article>

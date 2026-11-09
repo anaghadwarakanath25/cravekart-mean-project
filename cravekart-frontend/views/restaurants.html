@@ -1,0 +1,43 @@
+<section class="page-hero"><div class="container">
+  <div class="breadcrumb"><a href="#/">Home</a><i class="fa-solid fa-chevron-right"></i><span>Explore food</span></div>
+  <span class="eyebrow">YOUR TABLE IS WAITING</span>
+  <h1>Find your next <em>favourite.</em></h1>
+  <p>Explore the best restaurants and dishes around you.</p>
+</div></section>
+
+<section class="section container listing-layout">
+  <aside class="filter-panel">
+    <div class="filter-heading"><h3>Filters</h3><button class="clear-btn" ng-click="vm.clearFilters()">Clear all</button></div>
+    <div class="filter-group"><h4>Search</h4>
+      <div class="filter-search"><i class="fa-solid fa-magnifying-glass"></i><input ng-model="vm.search" ng-change="vm.refresh()" placeholder="Food or restaurant"></div>
+    </div>
+    <div class="filter-group"><h4>Cuisine</h4>
+      <label class="check-row" ng-repeat="cat in vm.categories"><input type="checkbox" ng-checked="vm.isSelected(cat)" ng-click="vm.toggleCategory(cat)"> {{cat}}</label>
+    </div>
+    <div class="filter-group"><h4>Dietary</h4>
+      <label class="check-row"><input type="checkbox" ng-model="vm.vegOnly" ng-change="vm.refresh()"> Vegetarian only</label>
+    </div>
+    <div class="filter-group"><h4>Minimum rating</h4>
+      <select ng-model="vm.minRating" ng-change="vm.refresh()" ng-options="o.v as o.l for o in [{v:0,l:'Any rating'},{v:4,l:'4.0 and above'},{v:4.5,l:'4.5 and above'}]"></select>
+    </div>
+  </aside>
+
+  <div class="listing-main">
+    <ck-state loading="vm.loading" error="vm.error" on-retry="vm.load()"></ck-state>
+
+    <div ng-if="!vm.loading && !vm.error">
+      <div class="listing-toolbar">
+        <div><h2>Restaurants near you</h2><p>{{vm.restaurants.length}} places to make you happy</p></div>
+        <select ng-model="vm.sortBy" ng-change="vm.refresh()" aria-label="Sort restaurants" ng-options="o.v as o.l for o in [{v:'recommended',l:'Recommended'},{v:'rating',l:'Top rated'},{v:'fast',l:'Fast delivery'}]"></select>
+      </div>
+      <div class="restaurant-grid"><ck-restaurant-card ng-repeat="r in vm.restaurants track by r.id" restaurant="r"></ck-restaurant-card></div>
+      <div class="empty-state" ng-if="!vm.restaurants.length">
+        <i class="fa-solid fa-utensils"></i><h3>No matches just yet</h3><p>Try changing your search or filters.</p>
+        <button class="btn btn-primary" ng-click="vm.clearFilters()">Clear filters</button>
+      </div>
+
+      <div class="menu-divider" ng-if="vm.foods.length"><span>OR PICK A DISH</span></div>
+      <div class="food-grid"><ck-food-card ng-repeat="f in vm.foods track by f.id" food="f" on-add="vm.add(food)"></ck-food-card></div>
+    </div>
+  </div>
+</section>

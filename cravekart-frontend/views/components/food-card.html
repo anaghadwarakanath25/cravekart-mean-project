@@ -1,0 +1,19 @@
+<article class="food-card">
+  <div class="food-image">
+    <img ck-img="{{$ctrl.food.image}}" alt="{{$ctrl.food.name}}">
+    <span class="veg-mark" ng-class="{nonveg: !$ctrl.food.isVeg}"><i class="fa-solid fa-circle"></i></span>
+  </div>
+  <div class="food-content">
+    <div class="food-name-row">
+      <h3>{{$ctrl.food.name}}</h3>
+      <span class="rating" ng-if="$ctrl.food.restaurantRating" title="Restaurant rating"><i class="fa-solid fa-star"></i> {{$ctrl.food.restaurantRating | number:1}}</span>
+    </div>
+    <p title="{{$ctrl.food.restaurantName}}">{{$ctrl.food.description}}</p>
+    <div class="food-bottom">
+      <strong>₹{{$ctrl.food.price | inr}}</strong>
+      <button class="add-btn" ng-click="$ctrl.onAdd({food: $ctrl.food})" ng-disabled="!$ctrl.food.restaurantOpen">
+        <i class="fa-solid" ng-class="$ctrl.food.restaurantOpen ? 'fa-plus' : 'fa-clock'"></i> {{$ctrl.food.restaurantOpen ? 'Add' : 'Closed'}}
+      </button>
+    </div>
+  </div>
+</article>

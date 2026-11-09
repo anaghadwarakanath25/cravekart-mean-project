@@ -1,0 +1,40 @@
+<section class="section container detail-page">
+  <a href="#/restaurants" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to restaurants</a>
+  <ck-state loading="vm.loading" error="vm.error" on-retry="vm.load()"></ck-state>
+
+  <div ng-if="!vm.loading && !vm.error && vm.restaurant">
+    <div class="detail-cover">
+      <img ck-img="{{vm.restaurant.coverImage}}" alt="{{vm.restaurant.name}}">
+      <div class="detail-cover-shade"></div>
+      <div class="detail-cover-text">
+        <span class="eyebrow">A LOCAL FAVOURITE</span>
+        <h1>{{vm.restaurant.name}}</h1>
+        <p>{{vm.restaurant.cuisineText}}</p>
+        <div class="detail-pills">
+          <span ng-if="vm.restaurant.rating"><i class="fa-solid fa-star"></i> {{vm.restaurant.rating | number:1}}</span>
+          <span><i class="fa-regular fa-clock"></i> {{vm.restaurant.eta}} min</span>
+          <span><i class="fa-solid fa-motorcycle"></i> ₹{{vm.restaurant.deliveryFee | inr}} delivery</span>
+          <span ng-if="vm.restaurant.area"><i class="fa-solid fa-location-dot"></i> {{vm.restaurant.area}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-toolbar">
+      <div><h2>Our menu</h2><p>{{vm.restaurant.description || 'Freshly made, just for you.'}}</p></div>
+      <span class="offer-tag static-tag closed-tag" ng-if="!vm.restaurant.isOpen">Closed now</span>
+    </div>
+
+    <div class="food-grid"><ck-food-card ng-repeat="f in vm.menu track by f.id" food="f" on-add="vm.add(food)"></ck-food-card></div>
+    <div class="empty-state" ng-if="!vm.menu.length"><h3>Menu coming soon</h3><p>This restaurant is still setting up its menu.</p></div>
+
+    <div class="reviews-block" ng-if="vm.reviews.length">
+      <div class="detail-toolbar"><div><h2>What people say</h2><p>{{vm.reviews.length}} review<span ng-if="vm.reviews.length !== 1">s</span> from verified orders</p></div></div>
+      <div class="review-card" ng-repeat="rv in vm.reviews">
+        <div class="review-head"><strong>{{rv.customer.name || 'CraveKart customer'}}</strong>
+          <span class="review-stars"><i class="fa-solid fa-star" ng-repeat="s in vm.stars(rv.rating) track by $index"></i></span>
+          <small>{{rv.createdAt | date:'d MMM y'}}</small></div>
+        <p ng-if="rv.comment">{{rv.comment}}</p>
+      </div>
+    </div>
+  </div>
+</section>

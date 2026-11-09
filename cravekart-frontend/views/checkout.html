@@ -1,0 +1,89 @@
+<section class="page-hero compact-hero"><div class="container">
+  <div class="breadcrumb"><a href="#/">Home</a><i class="fa-solid fa-chevron-right"></i><a href="#/cart">Cart</a><i class="fa-solid fa-chevron-right"></i><span>Checkout</span></div>
+  <span class="eyebrow">THE FINAL STEP</span>
+  <h1>Let's get it <em>delivered.</em></h1>
+</div></section>
+
+<section class="section container checkout-layout" ng-if="vm.cart.lines.length">
+  <form class="checkout-form" name="checkoutForm" novalidate ng-submit="vm.placeOrder(checkoutForm)">
+    <div class="checkout-card">
+      <div class="checkout-title"><span class="step-number">01</span><div><h2>Delivery details</h2><p>Where should we bring your food?</p></div></div>
+
+      <div class="address-chips" ng-if="vm.addresses.length">
+        <button type="button" class="address-chip" ng-repeat="a in vm.addresses" ng-class="{selected: vm.selectedAddressId === a._id}" ng-click="vm.useAddress(a)">
+          <i class="fa-solid fa-location-dot"></i><span><strong>{{a.label || 'Saved'}}</strong><small>{{a.line1}}, {{a.area}}</small></span>
+        </button>
+        <button type="button" class="address-chip" ng-class="{selected: !vm.selectedAddressId}" ng-click="vm.useNewAddress()"><i class="fa-solid fa-plus"></i><span><strong>New address</strong><small>Enter details below</small></span></button>
+      </div>
+
+      <div class="form-grid">
+        <label class="field full">Full name<input name="recipientName" ng-model="vm.form.recipientName" required minlength="2" placeholder="Your name"></label>
+        <label class="field">Phone number<input name="phone" ng-model="vm.form.phone" required ng-pattern="/^[0-9]{10}$/" maxlength="10" inputmode="numeric" placeholder="10-digit mobile number"></label>
+        <label class="field">PIN code<input name="postalCode" ng-model="vm.form.postalCode" required ng-pattern="/^[0-9]{6}$/" maxlength="6" inputmode="numeric" placeholder="6-digit PIN code"></label>
+        <label class="field full">House / Flat / Building<input name="line1" ng-model="vm.form.line1" required placeholder="Flat number, building name"></label>
+        <label class="field full">Street and area<input name="area" ng-model="vm.form.area" required placeholder="Street, area"></label>
+        <label class="field">City<input name="city" ng-model="vm.form.city" required placeholder="City"></label>
+        <label class="field">State<input name="state" ng-model="vm.form.state" required placeholder="State"></label>
+        <label class="field full">Landmark <span class="optional">(optional)</span><input name="landmark" ng-model="vm.form.landmark" placeholder="Near park, opposite temple…"></label>
+        <label class="field full">Delivery note <span class="optional">(optional)</span><textarea name="notes" ng-model="vm.form.notes" rows="2" placeholder="Any directions for the delivery partner?"></textarea></label>
+      </div>
+      <label class="check-row save-address" ng-if="!vm.selectedAddressId"><input type="checkbox" ng-model="vm.saveAddress"> Save this address for next time</label>
+    </div>
+
+    <div class="checkout-card">
+      <div class="checkout-title"><span class="step-number">02</span><div><h2>Payment method</h2><p>Choose how you'd like to pay.</p></div></div>
+      <div class="payment-options">
+        <label class="payment-option" ng-class="{selected: vm.payment === 'COD'}"><input type="radio" name="payment" ng-model="vm.payment" value="COD"><span class="payment-icon"><i class="fa-solid fa-money-bill-wave"></i></span><span><strong>Cash on Delivery</strong><small>Pay when your order arrives</small></span><i class="fa-regular fa-circle-check payment-check"></i></label>
+        <label class="payment-option" ng-class="{selected: vm.payment === 'UPI'}"><input type="radio" name="payment" ng-model="vm.payment" value="UPI"><span class="payment-icon"><i class="fa-solid fa-mobile-screen-button"></i></span><span><strong>UPI</strong><small>Selection is recorded — no real payment is taken yet</small></span><i class="fa-regular fa-circle-check payment-check"></i></label>
+        <label class="payment-option" ng-class="{selected: vm.payment === 'CARD'}"><input type="radio" name="payment" ng-model="vm.payment" value="CARD"><span class="payment-icon"><i class="fa-regular fa-credit-card"></i></span><span><strong>Credit / Debit card</strong><small>Selection is recorded — no real payment is taken yet</small></span><i class="fa-regular fa-circle-check payment-check"></i></label>
+      </div>
+    </div>
+
+    <div class="auth-error" ng-if="vm.error">{{vm.error}}</div>
+    <button class="btn btn-primary btn-block place-order" type="submit" ng-disabled="vm.placing">
+      <span ng-if="!vm.placing">Place order · ₹{{vm.total() | inr}} <i class="fa-solid fa-arrow-right"></i></span>
+      <span ng-if="vm.placing"><span class="spinner light"></span> Placing order…</span>
+    </button>
+    <p class="secure-note"><i class="fa-solid fa-lock"></i> Payments are not processed yet. Choose Cash on Delivery for a real test order.</p>
+  </form>
+
+  <aside class="bill-card checkout-summary">
+    <h2>Your order</h2>
+    <div class="summary-item" ng-repeat="line in vm.cart.lines track by line.key">
+      <img ck-img="{{line.food.image}}" alt="{{line.food.name}}">
+      <div><strong>{{line.food.name}}</strong><small>{{line.quantity}} × ₹{{line.food.price | inr}}</small></div>
+      <b>₹{{line.food.price * line.quantity | inr}}</b>
+    </div>
+
+    <div class="coupon-box">
+      <div ng-if="!vm.coupon" class="coupon-row">
+        <input ng-model="vm.couponCode" ng-keydown="$event.keyCode === 13 && vm.applyCoupon()" placeholder="Coupon code" aria-label="Coupon code">
+        <button type="button" class="small-outline" ng-click="vm.applyCoupon()" ng-disabled="vm.couponBusy || !vm.couponCode">Apply</button>
+      </div>
+      <div ng-if="vm.coupon" class="coupon-applied"><span><i class="fa-solid fa-tag"></i> <strong>{{vm.coupon.code}}</strong> applied</span><button type="button" class="clear-btn" ng-click="vm.removeCoupon()">Remove</button></div>
+      <div class="coupon-error" ng-if="vm.couponError">{{vm.couponError}}</div>
+    </div>
+
+    <div class="bill-line"><span>Subtotal</span><strong>₹{{vm.cart.subtotal | inr}}</strong></div>
+    <div class="bill-line"><span>Delivery fee</span><strong>₹{{vm.cart.deliveryFee | inr}}</strong></div>
+    <div class="bill-line"><span>Taxes</span><strong>₹{{vm.cart.tax | inr}}</strong></div>
+    <div class="bill-line discount-line" ng-if="vm.discount"><span>Discount</span><strong>− ₹{{vm.discount | inr}}</strong></div>
+    <div class="bill-total"><span>Total</span><strong>₹{{vm.total() | inr}}</strong></div>
+  </aside>
+</section>
+
+<div class="empty-cart container" ng-if="!vm.cart.lines.length && !vm.order">
+  <h2>Your cart is empty</h2>
+  <a href="#/restaurants" class="btn btn-primary">Find something delicious</a>
+</div>
+
+<div class="success-overlay" ng-if="vm.order">
+  <div class="success-modal">
+    <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+    <span class="eyebrow">ORDER CONFIRMED</span>
+    <h2>It's on its way to becoming delicious.</h2>
+    <p>Your order <strong>#{{vm.order.orderNumber}}</strong> has been placed successfully.</p>
+    <p class="success-total">Order total: ₹{{vm.order.total | inr}}</p>
+    <button class="btn btn-primary btn-block" ng-click="vm.finish()">View my orders <i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+</div>

@@ -1,0 +1,76 @@
+<section class="hero-section"><div class="container hero-grid">
+  <div class="hero-copy">
+    <div class="eyebrow"><span class="eyebrow-dot"></span> YOUR NEXT FAVOURITE MEAL IS HERE</div>
+    <h1>Good food.<br><em>Great mood.</em><br>Delivered.</h1>
+    <p>From local legends to new cravings, find the food you love and let us bring it to your door.</p>
+    <div class="hero-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input ng-model="vm.query" ng-keyup="$event.keyCode === 13 && vm.search()" placeholder="Search dishes, restaurants...">
+      <button class="btn btn-primary" ng-click="vm.search()">Find food <i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+    <div class="hero-meta"><span><i class="fa-solid fa-circle-check"></i> Fresh picks, always</span><span><i class="fa-solid fa-clock"></i> Quick delivery</span></div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-image-main"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1100" alt="Fresh healthy food bowl"></div>
+    <div class="floating-card rating-float"><span class="float-icon"><i class="fa-solid fa-star"></i></span><div><strong>4.9/5</strong><small>Food lovers' rating</small></div></div>
+    <div class="floating-card delivery-float"><span class="float-icon orange"><i class="fa-solid fa-motorcycle"></i></span><div><strong>30 min</strong><small>Average delivery</small></div></div>
+    <div class="hero-sticker">MADE<br>WITH LOVE <i class="fa-solid fa-heart"></i></div>
+  </div>
+</div></section>
+
+<section class="trust-strip"><div class="container trust-items">
+  <span><i class="fa-solid fa-leaf"></i> Fresh ingredients</span><span><i class="fa-solid fa-bolt"></i> Fast delivery</span>
+  <span><i class="fa-solid fa-heart"></i> Local favourites</span><span><i class="fa-solid fa-shield-heart"></i> Easy ordering</span>
+</div></section>
+
+<div class="container"><ck-state loading="vm.loading" error="vm.error" on-retry="vm.load()"></ck-state></div>
+
+<section class="section container" ng-if="!vm.loading && !vm.error">
+  <div class="section-heading">
+    <div><span class="eyebrow">WHAT ARE YOU CRAVING?</span><h2>Explore by <em>category</em></h2></div>
+    <a href="#/restaurants" class="text-link">View all food <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+  <div class="category-grid">
+    <button class="category-card" ng-repeat="cat in vm.categories" ng-style="{background: cat.color}" ng-click="vm.goCategory(cat.name)">
+      <span class="category-icon"><i class="fa-solid" ng-class="cat.icon"></i></span>
+      <strong>{{cat.name}}</strong><small>Explore now <i class="fa-solid fa-arrow-right"></i></small>
+    </button>
+  </div>
+</section>
+
+<section class="section section-soft" ng-if="!vm.loading && !vm.error && vm.restaurants.length"><div class="container">
+  <div class="section-heading">
+    <div><span class="eyebrow">HANDPICKED FOR YOU</span><h2>Popular <em>near you</em></h2><p class="section-subtitle">The neighbourhood favourites everyone's talking about.</p></div>
+    <a href="#/restaurants" class="text-link">All restaurants <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+  <div class="restaurant-grid"><ck-restaurant-card ng-repeat="r in vm.restaurants track by r.id" restaurant="r"></ck-restaurant-card></div>
+</div></section>
+
+<section class="section container" ng-if="!vm.loading && !vm.error && vm.foods.length">
+  <div class="section-heading">
+    <div><span class="eyebrow">A FEW CROWD PLEASERS</span><h2>Trending <em>right now</em></h2></div>
+    <a href="#/restaurants" class="text-link">Explore menu <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+  <div class="food-grid"><ck-food-card ng-repeat="f in vm.foods track by f.id" food="f" on-add="vm.add(food)"></ck-food-card></div>
+</section>
+
+<section class="promo-section container">
+  <div class="promo-content">
+    <span class="eyebrow">A LITTLE TREAT FROM US</span>
+    <h2>Good things come<br>to those who <em>crave.</em></h2>
+    <p>Use code <strong>WELCOME10</strong> at checkout for 10% off your order. Your next delicious moment is waiting.</p>
+    <a href="#/restaurants" class="btn btn-light">Explore the menu <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+  <div class="promo-art"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800" alt="Delicious pizza"></div>
+  <span class="promo-burst">10%<small>OFF</small></span>
+</section>
+
+<section class="section container testimonial">
+  <span class="eyebrow">KIND WORDS, FULL HEARTS</span>
+  <h2>Food tastes better<br>when it's <em>shared.</em></h2>
+  <div class="quote-card">
+    <div class="quote-stars">★★★★★</div>
+    <blockquote>“The easiest way to find something delicious. The whole experience feels thoughtful, from browsing to that first bite.”</blockquote>
+    <div class="quote-person"><span class="avatar">AM</span><span><strong>Ananya M.</strong><small>Happy CraveKart customer</small></span></div>
+  </div>
+</section>

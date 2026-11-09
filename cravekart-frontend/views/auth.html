@@ -1,0 +1,45 @@
+<section class="auth-page">
+  <div class="auth-visual">
+    <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=1200" alt="A colourful table of fresh food">
+    <div class="auth-visual-overlay">
+      <span class="eyebrow">GOOD FOOD IS A LOVE LANGUAGE</span>
+      <h2>Bring a little<br><em>happiness</em> to your table.</h2>
+      <p>Discover local favourites, one delicious bite at a time.</p>
+    </div>
+  </div>
+  <div class="auth-panel"><div class="auth-box">
+    <a href="#/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to home</a>
+    <span class="eyebrow">{{vm.mode === 'login' ? 'WELCOME BACK' : 'YOUR NEXT CRAVING STARTS HERE'}}</span>
+    <h1>{{vm.mode === 'login' ? 'Welcome back!' : 'Create your account.'}}</h1>
+    <p>{{vm.mode === 'login' ? 'Sign in to pick up where your cravings left off.' : 'Join CraveKart and make every meal a little more special.'}}</p>
+
+    <form name="authForm" novalidate ng-submit="vm.submit(authForm)">
+      <label class="field" ng-if="vm.mode === 'register'">Full name<input name="name" ng-model="vm.f.name" required maxlength="80" placeholder="Enter your name"></label>
+      <label class="field">Email address<input type="email" name="email" ng-model="vm.f.email" required placeholder="you@example.com" autocomplete="username"></label>
+      <label class="field" ng-if="vm.mode === 'register'">Phone <span class="optional">(optional)</span><input name="phone" ng-model="vm.f.phone" ng-pattern="/^[0-9]{10}$/" maxlength="10" inputmode="numeric" placeholder="10-digit mobile number"></label>
+      <label class="field">Password
+        <div class="password-wrap">
+          <input ng-attr-type="{{vm.showPassword ? 'text' : 'password'}}" name="password" ng-model="vm.f.password" required ng-minlength="vm.mode === 'register' ? 8 : 1" placeholder="{{vm.mode === 'register' ? 'At least 8 characters' : 'Your password'}}" autocomplete="{{vm.mode === 'login' ? 'current-password' : 'new-password'}}">
+          <button type="button" ng-click="vm.showPassword = !vm.showPassword" aria-label="Show or hide password"><i class="fa-regular" ng-class="vm.showPassword ? 'fa-eye-slash' : 'fa-eye'"></i></button>
+        </div>
+      </label>
+      <label class="field" ng-if="vm.mode === 'register'">Confirm password<input type="password" name="confirm" ng-model="vm.f.confirm" required placeholder="Re-enter password" autocomplete="new-password"></label>
+
+      <div class="auth-error" ng-if="vm.error">{{vm.error}}</div>
+      <button class="btn btn-primary btn-block auth-submit" type="submit" ng-disabled="vm.busy">
+        <span ng-if="!vm.busy">{{vm.mode === 'login' ? 'Log in' : 'Create account'}} <i class="fa-solid fa-arrow-right"></i></span>
+        <span ng-if="vm.busy"><span class="spinner light"></span> Please wait…</span>
+      </button>
+    </form>
+
+    <div class="auth-switch">
+      {{vm.mode === 'login' ? 'New to CraveKart?' : 'Already have an account?'}}
+      <a ng-href="{{vm.mode === 'login' ? '#/register' : '#/login'}}">{{vm.mode === 'login' ? 'Create an account' : 'Log in'}}</a>
+    </div>
+
+    <div class="demo-accounts" ng-if="vm.mode === 'login'">
+      <small>Local demo accounts (from <code>npm run seed</code>):</small>
+      <div><button type="button" class="small-outline" ng-repeat="a in vm.demoAccounts" ng-click="vm.fillDemo(a)">{{a.label}}</button></div>
+    </div>
+  </div></div>
+</section>

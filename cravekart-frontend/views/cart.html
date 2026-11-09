@@ -1,0 +1,57 @@
+<section class="page-hero compact-hero"><div class="container">
+  <div class="breadcrumb"><a href="#/">Home</a><i class="fa-solid fa-chevron-right"></i><span>Your cart</span></div>
+  <span class="eyebrow">ALMOST THERE</span>
+  <h1>Your cart, your <em>cravings.</em></h1>
+</div></section>
+
+<section class="empty-cart container" ng-if="vm.cart.isBlocked()">
+  <div class="empty-illustration"><i class="fa-solid fa-user-lock"></i></div>
+  <h2>Ordering is for customer accounts</h2>
+  <p>You are signed in as <strong>{{vm.auth.user.role}}</strong>. Log in with a customer account to build a cart.</p>
+  <a ng-href="#{{vm.auth.homePath()}}" class="btn btn-primary">Go to my portal <i class="fa-solid fa-arrow-right"></i></a>
+</section>
+
+<div class="container" ng-if="vm.cart.loading && !vm.cart.lines.length"><ck-state loading="true"></ck-state></div>
+
+<section class="section container cart-layout" ng-if="!vm.cart.isBlocked() && vm.cart.lines.length">
+  <div class="cart-items">
+    <div class="cart-topline">
+      <h2>Your items <span>({{vm.cart.count}})</span></h2>
+      <button class="clear-btn" ng-click="vm.cart.clear()" ng-disabled="vm.cart.busy">Clear cart</button>
+    </div>
+    <article class="cart-row" ng-repeat="line in vm.cart.lines track by line.key">
+      <img ck-img="{{line.food.image}}" alt="{{line.food.name}}">
+      <div class="cart-item-info">
+        <h3>{{line.food.name}}</h3>
+        <p>{{line.food.restaurantName}}</p>
+        <strong>₹{{line.food.price | inr}}</strong>
+      </div>
+      <div class="quantity-control">
+        <button ng-click="vm.cart.setQuantity(line, line.quantity - 1)" ng-disabled="vm.cart.busy" aria-label="Decrease quantity">−</button>
+        <span>{{line.quantity}}</span>
+        <button ng-click="vm.cart.setQuantity(line, line.quantity + 1)" ng-disabled="vm.cart.busy || line.quantity >= 20" aria-label="Increase quantity">+</button>
+      </div>
+      <strong class="line-total">₹{{line.food.price * line.quantity | inr}}</strong>
+      <button class="remove-btn" ng-click="vm.cart.remove(line)" ng-disabled="vm.cart.busy" aria-label="Remove item"><i class="fa-regular fa-trash-can"></i></button>
+    </article>
+    <a href="#/restaurants" class="text-link continue-link"><i class="fa-solid fa-arrow-left"></i> Continue exploring</a>
+  </div>
+
+  <aside class="bill-card">
+    <h2>Order summary</h2>
+    <div class="bill-line"><span>Item total</span><strong>₹{{vm.cart.subtotal | inr}}</strong></div>
+    <div class="bill-line"><span>Delivery fee</span><strong>₹{{vm.cart.deliveryFee | inr}}</strong></div>
+    <div class="bill-line"><span>Taxes &amp; charges (5%)</span><strong>₹{{vm.cart.tax | inr}}</strong></div>
+    <div class="bill-total"><span>To pay</span><strong>₹{{vm.cart.total | inr}}</strong></div>
+    <p class="bill-note"><i class="fa-solid fa-circle-info"></i> Coupons can be applied at checkout. The server calculates the final amount when you place the order.</p>
+    <a href="#/checkout" class="btn btn-primary btn-block">Proceed to checkout <i class="fa-solid fa-arrow-right"></i></a>
+    <p class="bill-note" ng-if="!vm.auth.isLoggedIn()"><i class="fa-solid fa-user"></i> You will be asked to log in before checkout. Your cart is saved.</p>
+  </aside>
+</section>
+
+<section class="empty-cart container" ng-if="!vm.cart.isBlocked() && !vm.cart.loading && !vm.cart.lines.length">
+  <div class="empty-illustration"><i class="fa-solid fa-basket-shopping"></i></div>
+  <h2>Your cart is taking a little break</h2>
+  <p>Looks like you haven't added anything delicious yet.</p>
+  <a href="#/restaurants" class="btn btn-primary">Explore restaurants <i class="fa-solid fa-arrow-right"></i></a>
+</section>

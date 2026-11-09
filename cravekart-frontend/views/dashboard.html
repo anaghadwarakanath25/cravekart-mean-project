@@ -1,0 +1,67 @@
+<section class="page-hero compact-hero"><div class="container">
+  <div class="breadcrumb"><a href="#/">Home</a><i class="fa-solid fa-chevron-right"></i><span>My account</span></div>
+  <span class="eyebrow">YOUR CRAVEKART SPACE</span>
+  <h1>Hello, <em>{{vm.auth.user.name}}.</em></h1>
+  <p>Good to see you. Here's what's happening with your orders.</p>
+</div></section>
+
+<section class="section container account-layout">
+  <aside class="account-sidebar">
+    <div class="account-user"><span class="account-avatar">{{vm.auth.initials()}}</span><strong>{{vm.auth.user.name}}</strong><small>{{vm.auth.user.email}}</small></div>
+    <a class="account-nav active"><i class="fa-solid fa-box"></i> My orders</a>
+    <a class="account-nav" href="#/restaurants"><i class="fa-regular fa-heart"></i> Discover food</a>
+    <a class="account-nav" href="#/cart"><i class="fa-solid fa-bag-shopping"></i> My cart</a>
+    <button class="account-nav logout" ng-click="vm.logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</button>
+  </aside>
+
+  <div class="account-main">
+    <div class="account-heading">
+      <div><h2>Order history</h2><p>Your delicious moments, all in one place.</p></div>
+      <a href="#/restaurants" class="btn btn-primary">Order food <i class="fa-solid fa-plus"></i></a>
+    </div>
+
+    <ck-state loading="vm.loading" error="vm.error" on-retry="vm.load()"></ck-state>
+
+    <div class="order-card" ng-repeat="order in vm.orders track by order.id">
+      <div class="order-card-head">
+        <div><span class="order-id">ORDER #{{order.number}}</span><small>{{order.date | date:'d MMM y, h:mm a'}} · {{order.restaurantName}}</small></div>
+        <span class="status-pill" ng-class="'st-' + order.status"><i class="fa-solid fa-circle"></i> {{order.status | orderStatus}}</span>
+      </div>
+      <div class="order-card-body">
+        <div class="order-food-preview">
+          <img ng-repeat="item in order.items.slice(0, 3)" ck-img="{{item.image}}" alt="{{item.name}}">
+          <span ng-if="order.items.length > 3">+{{order.items.length - 3}}</span>
+        </div>
+        <div class="order-food-text"><strong>{{order.itemCount}} item(s)</strong><small>{{order.itemNames}}</small></div>
+        <strong class="order-price">₹{{order.total | inr}}</strong>
+      </div>
+      <div class="order-card-foot">
+        <span><i class="fa-solid fa-circle-check"></i> {{order.paymentMethod}} · placed successfully</span>
+        <span class="order-actions">
+          <a href="javascript:void(0)" ng-if="order.canCancel" ng-click="vm.cancel(order)" ng-class="{disabled: order.busy}">Cancel order</a>
+          <a href="javascript:void(0)" ng-if="order.status === 'delivered' && !order.reviewed" ng-click="vm.openReview(order)">Rate order</a>
+          <a ng-href="#/restaurants/{{order.restaurantId}}">Order again <i class="fa-solid fa-arrow-right"></i></a>
+        </span>
+      </div>
+    </div>
+
+    <div class="empty-state" ng-if="!vm.loading && !vm.error && !vm.orders.length">
+      <div class="empty-illustration"><i class="fa-solid fa-receipt"></i></div>
+      <h3>No orders yet</h3><p>Your next favourite meal is waiting to be discovered.</p>
+      <a href="#/restaurants" class="btn btn-primary">Explore restaurants</a>
+    </div>
+  </div>
+</section>
+
+<div class="success-overlay" ng-if="vm.review">
+  <form class="success-modal review-modal" name="reviewForm" novalidate ng-submit="vm.submitReview()">
+    <span class="eyebrow">RATE YOUR ORDER</span>
+    <h2>How was {{vm.review.order.restaurantName}}?</h2>
+    <div class="star-picker"><button type="button" ng-repeat="n in [1,2,3,4,5]" ng-click="vm.review.rating = n" ng-class="{on: n <= vm.review.rating}" aria-label="{{n}} stars"><i class="fa-solid fa-star"></i></button></div>
+    <label class="field">Comment <span class="optional">(optional)</span><textarea ng-model="vm.review.comment" rows="3" maxlength="1000" placeholder="Tell others about the food and delivery"></textarea></label>
+    <div class="review-actions">
+      <button type="button" class="small-outline" ng-click="vm.closeReview()">Cancel</button>
+      <button class="btn btn-primary" type="submit" ng-disabled="vm.review.busy">Submit review</button>
+    </div>
+  </form>
+</div>

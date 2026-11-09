@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" ng-app="cravekart">
+<head>
+  <meta charset="utf-8">
+  <title ng-bind="pageTitle">CraveKart | Good food. Great moments.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f26a38">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body ng-controller="RootController as root" ng-cloak>
+
+  <div class="demo-banner" ng-if="root.mock && !root.bannerHidden">
+    <span><i class="fa-solid fa-flask"></i> <strong>Demo mode:</strong> sample data is stored in this browser only. No backend needed.</span>
+    <span><a href="javascript:void(0)" ng-click="root.resetDemo()">Reset demo data</a> <a href="javascript:void(0)" ng-click="root.bannerHidden = true" aria-label="Hide">&times;</a></span>
+  </div>
+
+  <header class="site-header">
+    <div class="nav-wrap container">
+      <a class="brand" href="#/"><span class="brand-mark"><i class="fa-solid fa-utensils"></i></span><span>Crave<span>Kart</span><small>GOOD FOOD. GREAT MOMENTS.</small></span></a>
+      <nav class="desktop-nav">
+        <a href="#/" ng-class="{active: root.isActive('/', true)}">Home</a>
+        <a href="#/restaurants" ng-class="{active: root.isActive('/restaurants')}">Explore food</a>
+        <a ng-if="!root.auth.isLoggedIn() || root.auth.hasRole('customer')" ng-href="#/dashboard" ng-class="{active: root.isActive('/dashboard')}">My orders</a>
+        <a ng-if="root.auth.hasRole('restaurant')" href="#/restaurant-panel" ng-class="{active: root.isActive('/restaurant-panel')}">Restaurant portal</a>
+        <a ng-if="root.auth.hasRole('admin')" href="#/admin-panel" ng-class="{active: root.isActive('/admin-panel')}">Admin console</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="location-pill" href="javascript:void(0)"><i class="fa-solid fa-location-dot"></i><span>{{root.city}}</span><i class="fa-solid fa-chevron-down"></i></a>
+        <a class="icon-link cart-link" href="#/cart" aria-label="Shopping cart"><i class="fa-solid fa-bag-shopping"></i><span class="cart-count">{{root.cart.count}}</span></a>
+        <a class="login-link" ng-if="root.auth.isLoggedIn()" ng-href="#{{root.auth.homePath()}}"><i class="fa-regular fa-user"></i> {{root.auth.user.name.split(' ')[0]}}</a>
+        <a class="login-link" href="javascript:void(0)" ng-if="root.auth.isLoggedIn()" ng-click="root.logout()">Log out</a>
+        <a class="login-link" ng-if="!root.auth.isLoggedIn()" href="#/login">Log in</a>
+        <a class="btn btn-primary nav-cta" ng-if="!root.auth.isLoggedIn()" href="#/register">Sign up</a>
+      </div>
+    </div>
+  </header>
+
+  <main ng-view></main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand footer-brand" href="#/"><span class="brand-mark"><i class="fa-solid fa-utensils"></i></span><span>Crave<span>Kart</span><small>GOOD FOOD. GREAT MOMENTS.</small></span></a>
+        <p class="footer-about">A little something delicious is always just around the corner. Discover local favourites and get them delivered.</p>
+      </div>
+      <div><h4>Explore</h4><a href="#/restaurants">Restaurants</a><a href="#/restaurants">Popular dishes</a><a href="#/dashboard">Your orders</a></div>
+      <div><h4>Company</h4><a href="javascript:void(0)">About us</a><a href="javascript:void(0)">Contact</a><a href="javascript:void(0)">Partner with us</a></div>
+      <div>
+        <h4>Get in touch</h4>
+        <p><i class="fa-regular fa-envelope"></i> hello@cravekart.example</p>
+        <p><i class="fa-solid fa-phone"></i> +91 98765 43210</p>
+        <div class="socials"><a href="javascript:void(0)"><i class="fa-brands fa-instagram"></i></a><a href="javascript:void(0)"><i class="fa-brands fa-facebook-f"></i></a><a href="javascript:void(0)"><i class="fa-brands fa-x-twitter"></i></a></div>
+      </div>
+    </div>
+    <div class="container footer-bottom"><span>© 2026 CraveKart. Demo project.</span><span>Made with <i class="fa-solid fa-heart"></i> for food lovers</span></div>
+  </footer>
+
+  <div class="toast-stack" aria-live="polite">
+    <div class="toast" ng-repeat="t in root.toasts.items track by t.id" ng-class="'toast-' + t.type" ng-click="root.toasts.dismiss(t)">
+      <i class="fa-solid" ng-class="{'fa-circle-check': t.type==='success', 'fa-circle-exclamation': t.type==='error', 'fa-circle-info': t.type==='info'}"></i>
+      <span>{{t.message}}</span>
+    </div>
+  </div>
+
+  <!-- AngularJS 1.8.2 (local copy in /vendor; CDN: https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js) -->
+  <script src="vendor/angular.min.js"></script>
+  <script src="vendor/angular-route.min.js"></script>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/mock/mock-server.js"></script>
+  <script src="js/services/core.js"></script>
+  <script src="js/services/auth.service.js"></script>
+  <script src="js/services/catalog.service.js"></script>
+  <script src="js/services/cart.service.js"></script>
+  <script src="js/services/ui.js"></script>
+  <script src="js/mock/mock-backend.js"></script>
+  <script src="js/controllers/root.controller.js"></script>
+  <script src="js/controllers/home.controller.js"></script>
+  <script src="js/controllers/restaurants.controller.js"></script>
+  <script src="js/controllers/restaurant-detail.controller.js"></script>
+  <script src="js/controllers/cart.controller.js"></script>
+  <script src="js/controllers/checkout.controller.js"></script>
+  <script src="js/controllers/auth.controller.js"></script>
+  <script src="js/controllers/dashboard.controller.js"></script>
+  <script src="js/controllers/operations.controller.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+/* Additions for the AngularJS build (loaded after styles.css). */
+[ng-cloak], .ng-cloak { display: none !important; }
+ck-food-card, ck-restaurant-card, ck-state { display: block; }
+.btn:disabled, .add-btn:disabled, .small-outline:disabled, .clear-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.add-btn:disabled:hover { background: #fff8f4; color: var(--orange); }
+
+/* Toasts */
+.toast-stack { position: fixed; right: 20px; bottom: 20px; z-index: 200; display: grid; gap: 10px; max-width: min(360px, calc(100vw - 40px)); }
+.toast { display: flex; align-items: flex-start; gap: 10px; background: #2b2724; color: #fff; padding: 12px 15px; border-radius: 11px; font-size: 12px; box-shadow: 0 12px 30px #1d171455; cursor: pointer; animation: toast-in .25s ease-out; }
+.toast i { margin-top: 2px; }
+.toast-success i { color: #5ed08a; } .toast-error { background: #7d2a20; } .toast-error i { color: #ffb3a8; } .toast-info i { color: #ffcf61; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* Loading + error states */
+.state-box { text-align: center; padding: 55px 20px; color: #857b73; font-size: 13px; }
+.state-box.state-error i { font-size: 28px; color: #e29a84; }
+.state-box.state-error p { margin: 10px 0 16px; color: #8d4a3b; }
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #f3c8b7; border-top-color: var(--orange); border-radius: 50%; vertical-align: -3px; margin-right: 6px; animation: spin .7s linear infinite; }
+.spinner.light { border-color: #ffffff66; border-top-color: #fff; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Restaurant status / misc cards */
+.closed-tag { background: #fdecea; color: #b8402f; }
+.reviews-block { margin-top: 20px; }
+.review-card { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+.review-head { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+.review-head small { margin-left: auto; color: #9b9188; font-size: 10px; }
+.review-stars { color: #e9a62d; font-size: 10px; letter-spacing: 1px; }
+.review-card p { margin: 8px 0 0; color: #6f675f; font-size: 12px; }
+
+/* Forms: validation + select styling */
+.field select, .ops-select, .inline-form input { border: 1px solid #eae3dc; border-radius: 8px; padding: 12px; font-size: 11px; background: #fff; outline: none; }
+.field select:focus { border-color: #f2a183; }
+.field input.ng-invalid.ng-touched, .field textarea.ng-invalid.ng-touched,
+form.ng-submitted .field input.ng-invalid, form.ng-submitted .field textarea.ng-invalid,
+.password-wrap:has(input.ng-invalid.ng-touched) { border-color: #e2766a; }
+.field input[type="number"] { -moz-appearance: textfield; }
+.check-row.full { grid-column: 1 / -1; }
+.save-address { margin-top: 14px; }
+.form-submit { margin-top: 18px; }
+.demo-accounts { margin-top: 22px; text-align: center; font-size: 10px; color: #a49a92; }
+.demo-accounts div { display: flex; gap: 8px; justify-content: center; margin-top: 8px; }
+.demo-accounts code { background: #f6f1ec; padding: 1px 5px; border-radius: 4px; }
+
+/* Checkout */
+.address-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; margin-bottom: 18px; }
+.address-chip { display: flex; align-items: center; gap: 10px; text-align: left; border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 10px 12px; color: var(--ink); }
+.address-chip i { color: var(--orange); }
+.address-chip strong, .address-chip small { display: block; }
+.address-chip strong { font-size: 11px; } .address-chip small { font-size: 9px; color: #938980; }
+.address-chip.selected { border-color: var(--orange); background: #fff9f5; }
+.coupon-box { margin: 16px 0 4px; }
+.coupon-row { display: flex; gap: 8px; }
+.coupon-row input { flex: 1; min-width: 0; border: 1px solid #eae3dc; border-radius: 8px; padding: 9px 11px; font-size: 11px; text-transform: uppercase; outline: none; }
+.coupon-row input:focus { border-color: #f2a183; }
+.coupon-applied { display: flex; justify-content: space-between; align-items: center; background: #eaf6ed; color: #28774a; padding: 9px 11px; border-radius: 8px; font-size: 11px; }
+.coupon-error { color: #c34435; font-size: 10px; margin-top: 7px; }
+.discount-line strong { color: #28774a; }
+
+/* Order status colours */
+.status-pill.st-placed, .status-pill.st-accepted, .status-pill.st-preparing, .status-pill.st-ready, .status-pill.st-out_for_delivery,
+.mini-status.st-placed, .mini-status.st-accepted, .mini-status.st-preparing, .mini-status.st-ready, .mini-status.st-out_for_delivery { background: #fff5df; color: #b17b1c; }
+.status-pill.st-delivered, .mini-status.st-delivered { background: #edf7ef; color: #378254; }
+.status-pill.st-cancelled, .status-pill.st-rejected, .mini-status.st-cancelled, .mini-status.st-rejected { background: #fdecea; color: #b8402f; }
+.order-actions { display: inline-flex; gap: 14px; align-items: center; }
+.order-actions a.disabled { opacity: .5; pointer-events: none; }
+.review-modal { text-align: left; }
+.review-modal h2 { font-size: 19px; }
+.star-picker { display: flex; gap: 6px; margin: 12px 0 16px; }
+.star-picker button { border: 0; background: none; font-size: 24px; color: #e2dad3; padding: 0; }
+.star-picker button.on { color: #e9a62d; }
+.review-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; align-items: center; }
+
+/* Operations portals */
+.ops-link { cursor: pointer; }
+.ops-order.wide { flex-wrap: wrap; }
+.ops-order.wide .ops-order-info strong { font-size: 11px; } .ops-order.wide .ops-order-info small { font-size: 9px; }
+.ops-actions { display: inline-flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+.ops-order .ops-actions { flex-basis: 100%; margin-left: 39px; }
+.ops-order-info { overflow-wrap: anywhere; }
+.small-outline { cursor: pointer; text-decoration: none; display: inline-block; }
+.small-outline.danger { color: #b8402f; border-color: #f0c9c2; }
+.small-outline.active { background: #fff2eb; color: var(--orange); border-color: #f3c8b7; }
+.ops-select { padding: 7px 9px; font-size: 10px; }
+.ops-panel + .ops-panel, .ops-notice + .stats-grid { margin-top: 14px; }
+.ops-empty { text-align: center; color: #a49a92; font-size: 11px; padding: 18px 0 6px; margin: 0; }
+.ops-notice { display: flex; gap: 10px; align-items: flex-start; background: #fff8f2; border: 1px solid #f6dfd2; border-radius: 10px; padding: 12px 14px; font-size: 11px; color: #8a5a43; margin-bottom: 14px; }
+.ops-notice i { color: var(--orange); margin-top: 2px; } .ops-notice a { color: var(--orange); font-weight: 800; }
+.ops-notice code { background: #f6e9df; padding: 1px 4px; border-radius: 4px; }
+.food-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid #f3eee9; }
+.food-row:first-child { border-top: 0; }
+.food-row img { width: 46px; height: 46px; object-fit: cover; border-radius: 9px; }
+.food-row-info { flex: 1; min-width: 0; }
+.food-row-info strong, .food-row-info small { display: block; }
+.food-row-info strong { font-size: 11px; } .food-row-info small { font-size: 9px; color: #9b9189; }
+.food-row .ops-actions { margin-left: 0; flex-basis: auto; }
+.food-row > b { font: 800 12px Manrope; }
+.veg-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #28864d; margin-left: 4px; }
+.veg-dot.nonveg { background: #c44b39; }
+.inline-form { display: flex; gap: 10px; margin-bottom: 8px; } .inline-form input { flex: 1; }
+.toggle-row { font-weight: 700; }
+@media (max-width: 700px) {
+  .toast-stack { left: 14px; right: 14px; bottom: 14px; max-width: none; }
+  .ops-order .ops-actions { margin-left: 0; }
+  .food-row { flex-wrap: wrap; }
+}
+
+/* Demo-mode banner */
+.demo-banner { display: flex; justify-content: space-between; gap: 12px; align-items: center; background: #fff4d9; color: #7a5a14; font-size: 11px; padding: 8px 24px; border-bottom: 1px solid #f1e0b2; }
+.demo-banner a { color: #b4561f; font-weight: 800; margin-left: 12px; }
+@media (max-width: 700px) { .demo-banner { flex-direction: column; align-items: flex-start; padding: 8px 16px; } .demo-banner a:first-child { margin-left: 0; } }
